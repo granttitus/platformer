@@ -12,8 +12,8 @@ do (
                 for x in [0...row.length]
                     @createTile x, y, @tiles[y][x]
 
-        createTile: (x, y, tileID) ->
-            tile = new Level.Tile x, y, tileID
+        createTile: (x, y, id) ->
+            tile = new Level.Tile x, y, id
             @addChild tile
             @tiles[y][x] = tile
 
@@ -21,7 +21,7 @@ do (
             indexX = Math.floor x / Level.Tile.SIZE
             indexY = Math.floor y / Level.Tile.SIZE
             tile = @get indexX, indexY
-            tile.tileID is 1
+            tile.id is 1
 
         get: (x, y) ->
             @tiles[y][x]

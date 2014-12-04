@@ -8,16 +8,25 @@ do (
     class Entity.Human extends Entity.Base
 
         defaults:
-            speed: 5
-            width: 40
-            height: 40
             image: 'human.png'
+            width: 7
+            height: 10
+            gravity: 0.5
+            acceleration: .4
+            jumpPower: 10
+            maxVelocity: 5
 
         initialize: ->
-            @bindKey ['UP', 'W', 'K'], @moveUp.bind @
-            @bindKey ['LEFT', 'A', 'H'], @moveLeft.bind @
-            @bindKey ['DOWN', 'S', 'J'], @moveDown.bind @
-            @bindKey ['RIGHT', 'D', 'L'], @moveRight.bind @
+            @bindKey ['UP', 'W', 'K'], @jump.bind @
+            @bindKey ['DOWN', 'S', 'J'], => @moveSouth @acceleration
+            @bindKey ['RIGHT', 'D', 'L'], => @moveEast @acceleration
+            @bindKey ['LEFT', 'A', 'H'], => @moveWest @acceleration
+
+        # TODO remove
+        jump: ->
+            if @canJump
+                @canJump = false
+                @moveNorth @jumpPower
 
         bindKey: (keys, fn) ->
             keys = [keys] unless Array.isArray keys

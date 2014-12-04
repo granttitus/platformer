@@ -12,8 +12,8 @@ do (
 
         @SIZE: 25
 
-        constructor: (x, y, @tileID) ->
-            super tileTextures[@tileID]
+        constructor: (x, y, @id) ->
+            super tileTextures[@id]
 
             @width = Level.Tile.SIZE
             @height = Level.Tile.SIZE
