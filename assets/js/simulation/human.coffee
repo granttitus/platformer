@@ -14,23 +14,15 @@ do (
             image: 'human.png'
 
         initialize: ->
-            @_bindExclusiveKey ['UP', 'W', 'K'], @moveUp.bind @
-            @_bindExclusiveKey ['LEFT', 'A', 'H'], @moveLeft.bind @
-            @_bindExclusiveKey ['DOWN', 'S', 'J'], @moveDown.bind @
-            @_bindExclusiveKey ['RIGHT', 'D', 'L'], @moveRight.bind @
+            @bindKey ['UP', 'W', 'K'], @moveUp.bind @
+            @bindKey ['LEFT', 'A', 'H'], @moveLeft.bind @
+            @bindKey ['DOWN', 'S', 'J'], @moveDown.bind @
+            @bindKey ['RIGHT', 'D', 'L'], @moveRight.bind @
 
-        # Bind key(s) to a function. One key, out
-        # of all keys bound, activate at a time
-        _bindExclusiveKey: (keys, fn) ->
+        bindKey: (keys, fn) ->
+            keys = [keys] unless Array.isArray keys
 
-            keys = [keys] unless _.isArray keys
-
-            _.each keys, (key) ->
-                Keyboard.Delegate.down key, =>
-                    if @_activeKey is key or not @_activeKey
-                        fn()
-                        @_activeKey = key
-
-                Keyboard.Delegate.up key, =>
-                    if @_activeKey is key
-                        @_activeKey = null
+            for key in keys
+                do (key=key) ->
+                    Keyboard.Delegate.down key, fn
+                    Keyboard.Delegate.up key, fn
