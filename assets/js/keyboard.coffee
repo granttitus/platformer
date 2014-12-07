@@ -1,5 +1,3 @@
-# TODO this is not a util. move out of util folder
-
 # `Keyboard` provides an additional layer
 # of convience on top of KeyDrown, a key
 # event library. Our wrapper allows us to
