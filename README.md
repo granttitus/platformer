@@ -1,7 +1,7 @@
 # Platformer
 ![http://i.imgur.com/X9RBC4u.png](http://i.imgur.com/X9RBC4u.png)
 
-## How to get up and running
+## Dev
 ```
 git clone https://github.com/stronglink/Platformer.git platformer
 cd platformer
