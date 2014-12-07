@@ -1,4 +1,4 @@
-# TODO optimize
+# TODO remove PIXI from simulation objects, and place here
 
 do (
     Render = platform.module 'render'

@@ -17,16 +17,19 @@ do (
             maxVelocity: 5
 
         initialize: ->
-            @bindKey ['UP', 'W', 'K'], @jump.bind @
-            @bindKey ['DOWN', 'S', 'J'], => @moveSouth @acceleration
-            @bindKey ['RIGHT', 'D', 'L'], => @moveEast @acceleration
-            @bindKey ['LEFT', 'A', 'H'], => @moveWest @acceleration
+            @bindKey ['UP', 'W'], @jump.bind @
+            @bindKey ['DOWN', 'S'], => @moveSouth @acceleration
+            @bindKey ['RIGHT', 'D'], => @moveEast @acceleration
+            @bindKey ['LEFT', 'A'], => @moveWest @acceleration
 
-        # TODO remove
+        update: ->
+            super
+            @canJump or= @onGround()
+
         jump: ->
-            if @canJump
-                @canJump = false
-                @moveNorth @jumpPower
+            return unless @canJump
+            @canJump = false
+            @moveNorth @jumpPower
 
         bindKey: (keys, fn) ->
             keys = [keys] unless Array.isArray keys

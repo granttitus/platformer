@@ -40,15 +40,13 @@ do (
             @checkNorthCollision()
             @checkSouthCollision()
 
-            @canJump or= @onGround()
-
         onGround: ->
             # TODO map util
             indexX = Math.floor @position.x / Level.Tile.SIZE
             indexY = Math.floor @position.y / Level.Tile.SIZE
 
             tile = @map.get indexX, indexY + 1
-            tile.id is 1 and tile.position.y is Math.round @position.y + @height
+            not tile.isWalkable() and tile.position.y is Math.round @position.y + @height
 
         moveNorth: (speed) ->
             @velocity.y -= speed
@@ -138,8 +136,8 @@ do (
                 @position.y = tile.position.y - @height
                 @velocity.y = 0
 
-        # TODO _baseHitbox like _standardCurveSegments that is computed on initialization
-        # TODO cache hitbox based on position?
+        # TODO compute hitbox based on width/height on initialization, then account for position
+        # TODO cache hitbox based on position
         # TODO comments
         hitbox: ->
             north = [x: @position.x, y: @position.y]
@@ -176,22 +174,23 @@ do (
 
             { north, south, east, west }
 
+        # Returns the first non-walkable tile between two points.
+        # Only tiles along one axis are examined.
         getObstacle: (start, end) ->
-            # TODO comment
             direction = 'x'
             direction = 'y' if start.x is end.x
-            # TODO comment
+            # Translate the coordinates to map indices
             start.x = Math.floor start.x / Level.Tile.SIZE
             start.y = Math.floor start.y / Level.Tile.SIZE
             end.x = Math.floor end.x / Level.Tile.SIZE
             end.y = Math.floor end.y / Level.Tile.SIZE
             tile = @map.get start.x, start.y
-            # TODO comment
+            # Examine tiles between the two points
             for index in [start[direction]..end[direction]]
                 if direction is 'x'
                     tile = @map.get index, start.y
                 else
                     tile = @map.get start.x, index
-                break unless tile.id isnt 1
-            return null if tile.id isnt 1
+                break unless tile.isWalkable()
+            return null if tile.isWalkable()
             tile
