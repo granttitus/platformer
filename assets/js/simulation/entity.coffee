@@ -1,9 +1,10 @@
 do (
     Entity = platform.module 'entity'
     Level = platform.module 'level'
+    MapUtil = platform.module 'util.map'
 ) ->
 
-    # TODO composition
+    # TODO remove PIXI
     class Entity.Base extends PIXI.Sprite
 
         constructor: ->
@@ -41,11 +42,8 @@ do (
             @checkSouthCollision()
 
         onGround: ->
-            # TODO map util
-            indexX = Math.floor @position.x / Level.Tile.SIZE
-            indexY = Math.floor @position.y / Level.Tile.SIZE
-
-            tile = @map.get indexX, indexY + 1
+            index = MapUtil.mapPositionToIndex @position.x, @position.y
+            tile = @map.get index.x, index.y + 1
             not tile.isWalkable() and tile.position.y is Math.round @position.y + @height
 
         moveNorth: (speed) ->
@@ -179,11 +177,8 @@ do (
         getObstacle: (start, end) ->
             direction = 'x'
             direction = 'y' if start.x is end.x
-            # Translate the coordinates to map indices
-            start.x = Math.floor start.x / Level.Tile.SIZE
-            start.y = Math.floor start.y / Level.Tile.SIZE
-            end.x = Math.floor end.x / Level.Tile.SIZE
-            end.y = Math.floor end.y / Level.Tile.SIZE
+            start = MapUtil.mapPositionToIndex start.x, start.y
+            end = MapUtil.mapPositionToIndex end.x, end.y
             tile = @map.get start.x, start.y
             # Examine tiles between the two points
             for index in [start[direction]..end[direction]]

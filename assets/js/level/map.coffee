@@ -1,5 +1,6 @@
 do (
     Level = platform.module 'level'
+    MapUtil = platform.module 'util.map'
 ) ->
 
     class Level.Map extends PIXI.DisplayObjectContainer
@@ -16,12 +17,6 @@ do (
             tile = new Level.Tile x, y, id
             @addChild tile
             @tiles[y][x] = tile
-
-        isWalkable: (x, y) ->
-            indexX = Math.floor x / Level.Tile.SIZE
-            indexY = Math.floor y / Level.Tile.SIZE
-            tile = @get indexX, indexY
-            tile.id is 1
 
         get: (x, y) ->
             @tiles[y][x]
