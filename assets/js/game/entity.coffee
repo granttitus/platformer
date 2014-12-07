@@ -4,9 +4,13 @@ do (
     MapUtil = platform.module 'util.map'
 ) ->
 
-    class Game.Base extends PIXI.Sprite
+    class Game.Entity extends PIXI.Sprite
 
-        constructor: ->
+        defaults: {}
+
+        constructor: (configuration) ->
+            @defaults[key] = value for own key, value of configuration
+
             # PIXI needs texture before width / height are set
             if @defaults.texture
                 super @defaults.texture
@@ -14,13 +18,11 @@ do (
                 super PIXI.Texture.fromImage @defaults.image
 
             # Apply default properties
+            # TODO defaults util
             @[key] = value for own key, value of @defaults
 
             # TODO find a better place for this
-            @velocity =
-                x: 0
-                y: 0
-
+            @velocity ?= { x: 0, y: 0 }
             @initialize?()
 
         update: ->

@@ -20,7 +20,6 @@ do (
 
         # TODO simplify, separate
         extractEntities: (levelData) ->
-
             entities = []
             for row, i in levelData
                 for cell, j in row
