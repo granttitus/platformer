@@ -1,16 +1,17 @@
 do (
-    Entity = platform.module 'entity'
+    Game = platform.module 'game'
     Level = platform.module 'level'
     MapUtil = platform.module 'util.map'
 ) ->
 
-    # TODO remove PIXI
-    class Entity.Base extends PIXI.Sprite
+    class Game.Base extends PIXI.Sprite
 
         constructor: ->
             # PIXI needs texture before width / height are set
-            super @defaults.texture if @defaults.texture
-            super PIXI.Texture.fromImage @defaults.image if @defaults.image
+            if @defaults.texture
+                super @defaults.texture
+            else
+                super PIXI.Texture.fromImage @defaults.image
 
             # Apply default properties
             @[key] = value for own key, value of @defaults
@@ -74,7 +75,7 @@ do (
                 if obstacle.position.y > tile.position.y
                     tile = obstacle
             if tile?
-                @position.y = tile.position.y + Level.Tile.SIZE
+                @position.y = tile.position.y + Game.Tile.SIZE
                 @velocity.y = 0
 
         checkEastCollision: ->
@@ -112,7 +113,7 @@ do (
                 if obstacle.position.x > tile.position.x
                     tile = obstacle
             if tile?
-                @position.x = tile.position.x + Level.Tile.SIZE
+                @position.x = tile.position.x + Game.Tile.SIZE
                 @velocity.x = 0
 
         checkSouthCollision: ->
@@ -141,8 +142,8 @@ do (
             north = [x: @position.x, y: @position.y]
             south = [x: @position.x, y: @position.y + @height]
 
-            for i in [1..Math.ceil @width / Level.Tile.SIZE] by 1
-                x = @position.x + i * Level.Tile.SIZE
+            for i in [1..Math.ceil @width / Game.Tile.SIZE] by 1
+                x = @position.x + i * Game.Tile.SIZE
                 x = Math.min @position.x + @width, x
                 north.push
                     x: x
@@ -154,8 +155,8 @@ do (
             east = [x: @position.x + @width, y: @position.y]
             west = [x: @position.x, y: @position.y]
 
-            for i in [1..Math.ceil @height / Level.Tile.SIZE] by 1
-                y = @position.y + i * Level.Tile.SIZE
+            for i in [1..Math.ceil @height / Game.Tile.SIZE] by 1
+                y = @position.y + i * Game.Tile.SIZE
                 y = Math.min @position.y + @height, y
                 east.push
                     x: @position.x + @width

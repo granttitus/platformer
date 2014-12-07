@@ -1,5 +1,3 @@
-# TODO remove PIXI from simulation objects, and place here
-
 do (
     Render = platform.module 'render'
 ) ->
@@ -8,9 +6,7 @@ do (
 
         constructor: ->
             @cache = []
-
             @stage = new PIXI.Stage 0x00CCFF
-
             @renderer = PIXI.autoDetectRenderer 650, 500
             document.body.appendChild @renderer.view
 

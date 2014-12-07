@@ -1,11 +1,11 @@
-#= require simulation/entity
+#= require game/entity
 
 do (
-    Entity = platform.module 'entity'
+    Game = platform.module 'game'
     Keyboard = platform.module 'keyboard'
 ) ->
 
-    class Entity.Human extends Entity.Base
+    class Game.Human extends Game.Base
 
         defaults:
             image: 'human.png'

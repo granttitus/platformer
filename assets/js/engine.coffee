@@ -1,25 +1,26 @@
 do (
-    Game = platform.module 'game'
+    Engine = platform.module 'game'
     Render = platform.module 'render'
     Level = platform.module 'level'
-    Simulation = platform.module 'simulation'
+    Game = platform.module 'game'
 ) ->
 
-    class Game.Engine
+    class Engine.Main
 
         constructor: ->
             @levelEngine = new Level.Engine()
             @renderEngine = new Render.Engine()
-            @simulationEngine = new Simulation.Engine()
+            @gameEngine = new Game.Engine()
 
         load: (n) ->
-            { @map, @entities } = @levelEngine.get 1
+            data = @levelEngine.get n
+            { @map, @entities } = @gameEngine.constructLevel data
 
         start: ->
             @update()
 
         update: =>
-            @simulationEngine.update { @map, @entities }
+            @gameEngine.update { @map, @entities }
             @renderEngine.update { @map, @entities }
 
             kd.tick()

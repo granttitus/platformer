@@ -1,9 +1,9 @@
 do (
-    Level = platform.module 'level'
+    Game = platform.module 'game'
     MapUtil = platform.module 'util.map'
 ) ->
 
-    class Level.Map extends PIXI.DisplayObjectContainer
+    class Game.Map extends PIXI.DisplayObjectContainer
 
         constructor: (@tiles) ->
             super
@@ -14,7 +14,7 @@ do (
                     @createTile x, y, @tiles[y][x]
 
         createTile: (x, y, id) ->
-            tile = new Level.Tile x, y, id
+            tile = new Game.Tile x, y, id
             @addChild tile
             @tiles[y][x] = tile
 

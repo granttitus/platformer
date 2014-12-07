@@ -1,7 +1,7 @@
 #= require util/util
 
 do (
-    Level = platform.module 'level'
+    Game = platform.module 'game'
     Util = platform.module 'util'
     MapUtil = platform.module 'util.map'
 ) ->
@@ -10,5 +10,5 @@ do (
 
         # TODO add converse
         mapPositionToIndex: (x, y) ->
-            x: Math.floor x / Level.Tile.SIZE
-            y: Math.floor y / Level.Tile.SIZE
+            x: Math.floor x / Game.Tile.SIZE
+            y: Math.floor y / Game.Tile.SIZE

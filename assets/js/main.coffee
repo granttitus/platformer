@@ -3,10 +3,10 @@
 #= require_tree .
 
 do (
-    Game = platform.module 'game'
+    Engine = platform.module 'game'
 ) ->
 
     window.onload = ->
-        engine = new Game.Engine()
+        engine = new Engine.Main()
         engine.load 1
         engine.start()

@@ -1,5 +1,5 @@
 do (
-    Level = platform.module 'level'
+    Game = platform.module 'game'
 ) ->
 
     TILE_TEXTURES = [
@@ -12,18 +12,18 @@ do (
         0: true
         2: true
 
-    class Level.Tile extends PIXI.Sprite
+    class Game.Tile extends PIXI.Sprite
 
         @SIZE: 25
 
         constructor: (x, y, @id) ->
             super TILE_TEXTURES[@id]
 
-            @width = Level.Tile.SIZE
-            @height = Level.Tile.SIZE
+            @width = Game.Tile.SIZE
+            @height = Game.Tile.SIZE
 
-            @position.x = x * Level.Tile.SIZE
-            @position.y = y * Level.Tile.SIZE
+            @position.x = x * Game.Tile.SIZE
+            @position.y = y * Game.Tile.SIZE
 
             @position.indexX = x
             @position.indexY = y
