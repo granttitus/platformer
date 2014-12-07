@@ -9,8 +9,8 @@ do (
 
         constructor: ->
             @levelEngine = new Level.Engine()
-            @renderEngine = new Render.Engine()
             @gameEngine = new Game.Engine()
+            @renderEngine = new Render.Engine()
 
         load: (n) ->
             data = @levelEngine.get n
