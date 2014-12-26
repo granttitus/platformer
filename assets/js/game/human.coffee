@@ -5,7 +5,7 @@ do (
     Keyboard = platform.module 'keyboard'
 ) ->
 
-    class Game.Human extends Game.Base
+    class Game.Human extends Game.Entity
 
         defaults:
             image: 'human.png'

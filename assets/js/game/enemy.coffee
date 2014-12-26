@@ -4,7 +4,7 @@ do (
     Game = platform.module 'game'
 ) ->
 
-    class Game.Enemy extends Game.Base
+    class Game.Enemy extends Game.Entity
 
         defaults:
             width: 30
