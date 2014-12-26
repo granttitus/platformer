@@ -8,7 +8,6 @@ do (
     class Game.Human extends Game.Entity
 
         defaults:
-            image: 'human.png'
             width: 7
             height: 10
             gravity: 0.5

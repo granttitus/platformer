@@ -2,19 +2,12 @@ do (
     Render = platform.module 'render'
 ) ->
 
+    # TODO
     class Render.Engine
 
-        constructor: ->
-            @cache = []
-            @stage = new PIXI.Stage 0x00CCFF
-            @renderer = PIXI.autoDetectRenderer 650, 500
-            document.body.appendChild @renderer.view
-
         update: ({ @map, @entities }) ->
-            @renderer.render @stage
+            x = document.querySelector '.x'
+            x.innerHTML = @entities[0].position.x.toFixed(0)
 
-            if @entities isnt @cache
-                @stage.removeChild e for e in @cache
-                @stage.addChild e for e in @entities
-                @stage.addChild @map
-                @cache = @entities
+            y = document.querySelector '.y'
+            y.innerHTML = @entities[0].position.y.toFixed(0)

@@ -24,4 +24,4 @@ do (
             @renderEngine.update { @map, @entities }
 
             kd.tick()
-            requestAnimFrame @update
+            requestAnimationFrame @update
