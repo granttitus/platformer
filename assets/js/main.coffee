@@ -10,3 +10,6 @@ do (
         engine = new Engine.Main()
         engine.load 1
         engine.start()
+
+        # TODO
+        window.engine = engine

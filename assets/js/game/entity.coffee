@@ -6,12 +6,11 @@ do (
 
     class Game.Entity
 
+        defaults: {}
+
         constructor: ->
             @velocity = { x: 0, y: 0 }
-            @position = { x: 0, y: 0 }
-
             @[key] = value for own key, value of @defaults
-
             @initialize?()
 
         update: ->
@@ -25,8 +24,8 @@ do (
             if @velocity.x < -@maxVelocity
                 @velocity.x = -@maxVelocity
 
-            @position.x += @velocity.x
-            @position.y += @velocity.y
+            @x += @velocity.x
+            @y += @velocity.y
 
             @checkEastCollision()
             @checkWestCollision()
@@ -34,9 +33,9 @@ do (
             @checkSouthCollision()
 
         onGround: ->
-            index = MapUtil.mapPositionToIndex @position.x, @position.y
+            index = MapUtil.mapPositionToIndex @x, @y
             tile = @map.get index.x, index.y + 1
-            not tile.isWalkable() and tile.position.y is Math.round @position.y + @height
+            not tile.isWalkable() and tile.y is Math.round @y + @height
 
         moveNorth: (speed) ->
             @velocity.y -= speed
@@ -63,10 +62,10 @@ do (
                 continue unless obstacle?
 
                 tile ?= obstacle
-                if obstacle.position.y > tile.position.y
+                if obstacle.y > tile.y
                     tile = obstacle
             if tile?
-                @position.y = tile.position.y + Game.Tile.SIZE
+                @y = tile.y + Game.Tile.SIZE
                 @velocity.y = 0
 
         checkEastCollision: ->
@@ -82,10 +81,10 @@ do (
                 continue unless obstacle?
 
                 tile ?= obstacle
-                if obstacle.position.x < tile.position.x
+                if obstacle.x < tile.x
                     tile = obstacle
             if tile?
-                @position.x = tile.position.x - @width
+                @x = tile.x - @width
                 @velocity.x = 0
 
         checkWestCollision: ->
@@ -101,10 +100,10 @@ do (
                 continue unless obstacle?
 
                 tile ?= obstacle
-                if obstacle.position.x > tile.position.x
+                if obstacle.x > tile.x
                     tile = obstacle
             if tile?
-                @position.x = tile.position.x + Game.Tile.SIZE
+                @x = tile.x + Game.Tile.SIZE
                 @velocity.x = 0
 
         checkSouthCollision: ->
@@ -120,40 +119,40 @@ do (
                 continue unless obstacle?
 
                 tile ?= obstacle
-                if obstacle.position.y < tile.position.y
+                if obstacle.y < tile.y
                     tile = obstacle
             if tile?
-                @position.y = tile.position.y - @height
+                @y = tile.y - @height
                 @velocity.y = 0
 
         # TODO compute hitbox based on width/height on initialization, then account for position
         # TODO cache hitbox based on position
         # TODO comments
         hitbox: ->
-            north = [x: @position.x, y: @position.y]
-            south = [x: @position.x, y: @position.y + @height]
+            north = [x: @x, y: @y]
+            south = [x: @x, y: @y + @height]
 
             for i in [1..Math.ceil @width / Game.Tile.SIZE] by 1
-                x = @position.x + i * Game.Tile.SIZE
-                x = Math.min @position.x + @width, x
+                x = @x + i * Game.Tile.SIZE
+                x = Math.min @x + @width, x
                 north.push
                     x: x
-                    y: @position.y
+                    y: @y
                 south.push
                     x: x
-                    y: @position.y + @height
+                    y: @y + @height
 
-            east = [x: @position.x + @width, y: @position.y]
-            west = [x: @position.x, y: @position.y]
+            east = [x: @x + @width, y: @y]
+            west = [x: @x, y: @y]
 
             for i in [1..Math.ceil @height / Game.Tile.SIZE] by 1
-                y = @position.y + i * Game.Tile.SIZE
-                y = Math.min @position.y + @height, y
+                y = @y + i * Game.Tile.SIZE
+                y = Math.min @y + @height, y
                 east.push
-                    x: @position.x + @width
+                    x: @x + @width
                     y: y
                 west.push
-                    x: @position.x
+                    x: @x
                     y: y
 
             # Prevent entity from hugging walls

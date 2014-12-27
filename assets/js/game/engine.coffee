@@ -26,7 +26,7 @@ do (
                 for cell, j in row
                     if cell is 2
                         human = new Game.Human()
-                        human.position.x = Game.Tile.SIZE * j + 10
-                        human.position.y = Game.Tile.SIZE * i + 10
+                        human.x = Game.Tile.SIZE * j + 10
+                        human.y = Game.Tile.SIZE * i + 10
                         entities.push human
             entities
