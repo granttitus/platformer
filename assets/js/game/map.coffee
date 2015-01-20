@@ -17,3 +17,9 @@ do (
 
         get: (x, y) ->
             @tiles[y][x]
+
+        each: (fn) ->
+            for row in @tiles
+                for tile in row
+                    fn tile
+            return

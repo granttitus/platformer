@@ -18,11 +18,9 @@ do (
             @context.fillStyle = CLEAR_COLOR
             @context.fillRect 0, 0, WIDTH, HEIGHT
 
-            # TODO remove knowledge of game object internals
-            for row in @map.tiles
-                for tile in row
-                    @context.fillStyle = @getTileColor tile.id
-                    @context.fillRect tile.x, tile.y, tile.width, tile.height
+            @map.each (tile) =>
+                @context.fillStyle = @getTileColor tile.id
+                @context.fillRect tile.x, tile.y, tile.width, tile.height
 
             for e in @entities
                 @context.fillStyle = 'rgb(255, 255, 255)'

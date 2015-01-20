@@ -8,7 +8,8 @@ do (
             for e in @entities
                 e.update()
 
-        constructLevel: (data) ->
+        load: (n) ->
+            data = Game.getLevel n
             entities = @extractEntities data
             map = new Game.Map data
 

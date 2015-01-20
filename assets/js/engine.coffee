@@ -1,27 +1,24 @@
 do (
     Engine = platform.module 'game'
     Render = platform.module 'render'
-    Level = platform.module 'level'
     Game = platform.module 'game'
 ) ->
 
     class Engine.Main
 
         constructor: ->
-            @levelEngine = new Level.Engine()
-            @gameEngine = new Game.Engine()
-            @renderEngine = new Render.Engine()
+            @game = new Game.Engine()
+            @render = new Render.Engine()
 
         load: (n) ->
-            data = @levelEngine.get n
-            { @map, @entities } = @gameEngine.constructLevel data
+            { @map, @entities } = @game.load n
 
         start: ->
             @update()
 
         update: =>
-            @gameEngine.update { @map, @entities }
-            @renderEngine.update { @map, @entities }
+            @game.update { @map, @entities }
+            @render.update { @map, @entities }
 
             kd.tick()
             requestAnimationFrame @update
