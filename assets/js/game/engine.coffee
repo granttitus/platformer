@@ -1,33 +1,14 @@
 do (
     Game = platform.module 'game'
+    {Event} = platform.module 'mixin'
 ) ->
 
     class Game.Engine
+        Event.mixin @::
 
-        update: ({ @map, @entities }) ->
+        initialize: ({ @map, @entities }) ->
+
+        update: ->
             for e in @entities
                 e.update()
-
-        load: (n) ->
-            data = Game.getLevel n
-            entities = @extractEntities data
-            map = new Game.Map data
-
-            # Give each entity a reference to the map
-            e.map = map for e in entities
-
-            map: map
-            entities: entities
-
-        # TODO simplify, separate
-        extractEntities: (levelData) ->
-
-            entities = []
-            for row, i in levelData
-                for cell, j in row
-                    if cell is 2
-                        human = new Game.Human()
-                        human.x = Game.Tile.SIZE * j + 10
-                        human.y = Game.Tile.SIZE * i + 10
-                        entities.push human
-            entities
+            return

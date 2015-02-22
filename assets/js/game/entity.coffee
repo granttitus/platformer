@@ -1,22 +1,37 @@
 do (
     Game = platform.module 'game'
-    Level = platform.module 'level'
     MapUtil = platform.module 'util.map'
+    {Event, Configurable} = platform.module 'mixin'
 ) ->
 
     class Game.Entity
+        Event.mixin @::
+        Configurable.mixin @::
 
-        defaults: {}
+        key: 'entity'
+
+        defaults:
+            width: 26
+            height: 26
+            gravity: 0.5
+            acceleration: 0.4
+            maxVelocity: 10
 
         constructor: ->
-            @velocity = { x: 0, y: 0 }
-            @[key] = value for own key, value of @defaults
-            @initialize?()
+            @velocity = {x: 0, y: 0}
+            @configure {}, applyDefaults: true
+            @initialize? arguments...
 
         update: ->
             @velocity.x *= .8
             @velocity.y *= .9
             @velocity.y += @gravity
+
+            if @velocity.x < 0.1 and @velocity.x > -0.1
+                @velocity.x = 0
+
+            if @velocity.y < 0.1 and @velocity.y > -0.1
+                @velocity.y = 0
 
             if @velocity.x > @maxVelocity
                 @velocity.x = @maxVelocity
@@ -24,114 +39,100 @@ do (
             if @velocity.x < -@maxVelocity
                 @velocity.x = -@maxVelocity
 
-            @x += @velocity.x
-            @y += @velocity.y
+            if @velocity.y > @maxVelocity
+                @velocity.y = @maxVelocity
 
-            @checkEastCollision()
-            @checkWestCollision()
+            if @velocity.y < -@maxVelocity
+                @velocity.y = -@maxVelocity
+
+            @y += @velocity.y
             @checkNorthCollision()
             @checkSouthCollision()
 
-        onGround: ->
-            index = MapUtil.mapPositionToIndex @x, @y
-            tile = @map.get index.x, index.y + 1
-            not tile.isWalkable() and tile.y is Math.round @y + @height
+            @x += @velocity.x
+            @checkEastCollision()
+            @checkWestCollision()
+            return
 
         moveNorth: (speed) ->
             @velocity.y -= speed
+            return
 
         moveSouth: (speed) ->
             @velocity.y += speed
+            return
 
         moveEast: (speed) ->
             @velocity.x += speed
+            return
 
         moveWest: (speed) ->
             @velocity.x -= speed
+            return
+
+        collideNorth: (tile) ->
+            @y = tile.y + Game.Tile.SIZE
+            @velocity.y = 0
+            return
+
+        collideSouth: (tile) ->
+            @y = tile.y - @height - 0.1
+            @velocity.y = 0
+            return
+
+        collideEast: (tile) ->
+            @x = tile.x - @width - 0.1
+            @velocity.x = 0
+            return
+
+        collideWest: (tile) ->
+            @x = tile.x + Game.Tile.SIZE
+            @velocity.x = 0
+            return
 
         checkNorthCollision: ->
             return unless @velocity.y < 0
-            tile = null
-            hitbox = @hitbox()
-            # Check each point of contact for a collision
-            for hitpoint in hitbox.north
-                # Find the first obstacle within the path of movement
-                obstacle = @getObstacle hitpoint,
-                    x: hitpoint.x
-                    y: hitpoint.y + @velocity.y
-                continue unless obstacle?
-
-                tile ?= obstacle
-                if obstacle.y > tile.y
-                    tile = obstacle
-            if tile?
-                @y = tile.y + Game.Tile.SIZE
-                @velocity.y = 0
-
-        checkEastCollision: ->
-            return unless @velocity.x > 0
-            tile = null
-            hitbox = @hitbox()
-            # Check each point of contact for a collision
-            for hitpoint in hitbox.east
-                # Find the first obstacle within the path of movement
-                obstacle = @getObstacle hitpoint,
-                    x: hitpoint.x + @velocity.x
-                    y: hitpoint.y
-                continue unless obstacle?
-
-                tile ?= obstacle
-                if obstacle.x < tile.x
-                    tile = obstacle
-            if tile?
-                @x = tile.x - @width
-                @velocity.x = 0
-
-        checkWestCollision: ->
-            return unless @velocity.x < 0
-            tile = null
-            hitbox = @hitbox()
-            # Check each point of contact for a collision
-            for hitpoint in hitbox.west
-                # Find the first obstacle within the path of movement
-                obstacle = @getObstacle hitpoint,
-                    x: hitpoint.x - @velocity.x
-                    y: hitpoint.y
-                continue unless obstacle?
-
-                tile ?= obstacle
-                if obstacle.x > tile.x
-                    tile = obstacle
-            if tile?
-                @x = tile.x + Game.Tile.SIZE
-                @velocity.x = 0
+            for hitpoint in @hitbox().north
+                pos = MapUtil.mapPositionToIndex hitpoint.x, hitpoint.y + @velocity.y
+                tile = @map.get pos.x, pos.y
+                if @isObstacle tile
+                    @collideNorth tile
+                    break
+            return
 
         checkSouthCollision: ->
             return unless @velocity.y > 0
-            tile = null
-            hitbox = @hitbox()
-            # Check each point of contact for a collision
-            for hitpoint in hitbox.south
-                # Find the first obstacle within the path of movement
-                obstacle = @getObstacle hitpoint,
-                    x: hitpoint.x
-                    y: hitpoint.y + @velocity.y
-                continue unless obstacle?
+            for hitpoint in @hitbox().south
+                pos = MapUtil.mapPositionToIndex hitpoint.x, hitpoint.y + @velocity.y
+                tile = @map.get pos.x, pos.y
+                if @isObstacle tile
+                    @collideSouth tile
+            return
 
-                tile ?= obstacle
-                if obstacle.y < tile.y
-                    tile = obstacle
-            if tile?
-                @y = tile.y - @height
-                @velocity.y = 0
+        checkEastCollision: ->
+            return unless @velocity.x > 0
+            for hitpoint in @hitbox().east
+                pos = MapUtil.mapPositionToIndex hitpoint.x + @velocity.x, hitpoint.y
+                tile = @map.get pos.x, pos.y
+                if @isObstacle tile
+                    @collideEast tile
+                    break
+            return
 
-        # TODO compute hitbox based on width/height on initialization, then account for position
-        # TODO cache hitbox based on position
-        # TODO comments
+        checkWestCollision: ->
+            return unless @velocity.x < 0
+            for hitpoint in @hitbox().west
+                pos = MapUtil.mapPositionToIndex hitpoint.x + @velocity.x, hitpoint.y
+                tile = @map.get pos.x, pos.y
+                if @isObstacle tile
+                    @collideWest tile
+                    break
+            return
+
+        # TODO remove
         hitbox: ->
             north = [x: @x, y: @y]
             south = [x: @x, y: @y + @height]
-
             for i in [1..Math.ceil @width / Game.Tile.SIZE] by 1
                 x = @x + i * Game.Tile.SIZE
                 x = Math.min @x + @width, x
@@ -144,7 +145,6 @@ do (
 
             east = [x: @x + @width, y: @y]
             west = [x: @x, y: @y]
-
             for i in [1..Math.ceil @height / Game.Tile.SIZE] by 1
                 y = @y + i * Game.Tile.SIZE
                 y = Math.min @y + @height, y
@@ -155,28 +155,7 @@ do (
                     x: @x
                     y: y
 
-            # Prevent entity from hugging walls
-            north[north.length - 1].x -= 1
-            south[south.length - 1].x -= 1
-            east[east.length - 1].y -= 1
-            west[west.length - 1].y -= 1
-
             { north, south, east, west }
 
-        # Returns the first non-walkable tile between two points.
-        # Only tiles along one axis are examined.
-        getObstacle: (start, end) ->
-            direction = 'x'
-            direction = 'y' if start.x is end.x
-            start = MapUtil.mapPositionToIndex start.x, start.y
-            end = MapUtil.mapPositionToIndex end.x, end.y
-            tile = @map.get start.x, start.y
-            # Examine tiles between the two points
-            for index in [start[direction]..end[direction]]
-                if direction is 'x'
-                    tile = @map.get index, start.y
-                else
-                    tile = @map.get start.x, index
-                break unless tile.isWalkable()
-            return null if tile.isWalkable()
-            tile
+        isObstacle: (tile) ->
+            not tile.isWalkable()

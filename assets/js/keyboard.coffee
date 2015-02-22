@@ -1,20 +1,4 @@
-# `Keyboard` provides an additional layer
-# of convience on top of KeyDrown, a key
-# event library. Our wrapper allows us to
-# bind multiple functions to a single key
-# event.
-#
-# The hash for a given action takes this form:
-#
-# down: {
-#   'W': [fn, fn, fn]
-#   'S': [fn]
-# }
-#
-# When a key, say 'W', is pressed, all
-# functions within the `down['W']`
-# array are executed.
-
+# TODO remove keydrown
 do (
     Keyboard = platform.module 'keyboard'
 ) ->

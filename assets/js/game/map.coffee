@@ -5,21 +5,24 @@ do (
 
     class Game.Map
 
-        constructor: (@tiles) ->
-            for y in [0...@tiles.length]
-                row = @tiles[y]
-                for x in [0...row.length]
-                    @createTile x, y, @tiles[y][x]
+        constructor: (tiles) ->
+            @interactiveTiles = []
+            @rows = tiles.length
+            @columns = tiles[0].length
+            @tiles = new Array tiles.length
+            for y in [0...tiles.length]
+                for x in [0...tiles[y].length]
+                    @createTile x, y, tiles[y][x]
 
         createTile: (x, y, id) ->
             tile = new Game.Tile x, y, id
-            @tiles[y][x] = tile
+            @tiles[y * @columns + x] = tile
+            return
 
         get: (x, y) ->
-            @tiles[y][x]
+            @tiles[y * @columns + x]
 
         each: (fn) ->
-            for row in @tiles
-                for tile in row
-                    fn tile
+            for tile in @tiles
+                fn tile
             return

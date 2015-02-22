@@ -1,5 +1,5 @@
 # Platformer
-![http://i.imgur.com/X9RBC4u.png](http://i.imgur.com/X9RBC4u.png)
+![http://i.imgur.com/1TYtPbF.png](http://i.imgur.com/1TYtPbF.png)
 
 ## Dev
 ```
