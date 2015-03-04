@@ -16,17 +16,26 @@ do (
             @canvas.height = HEIGHT
             @context = @canvas.getContext '2d'
 
-        update: ({ @map, @entities }) ->
+        update: ({ map, entities, camera }) ->
+            camera.bound WIDTH, HEIGHT
             @context.fillStyle = CLEAR_COLOR
             @context.fillRect 0, 0, WIDTH, HEIGHT
 
-            @map.each (tile) =>
+            map.each (tile) =>
                 @context.fillStyle = @getTileColor tile.id
-                @context.fillRect tile.x, tile.y, tile.width, tile.height
+                {x, y} = camera.transform tile.x, tile.y
+                x = Math.ceil x
+                y = Math.ceil y
+                width = Math.ceil tile.width * camera.zoom
+                height = Math.ceil tile.height * camera.zoom
+                @context.fillRect x, y, width, height
 
-            for e in @entities
+            for e in entities
                 @context.fillStyle = 'rgb(255, 255, 255)'
-                @context.fillRect e.x, e.y, e.width, e.height
+                {x, y} = camera.transform e.x, e.y
+                width = e.width * camera.zoom
+                height = e.height * camera.zoom
+                @context.fillRect x, y, width, height
             return
 
         getTileColor: (id) ->

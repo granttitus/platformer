@@ -7,8 +7,10 @@ do (
         Event.mixin @::
 
         initialize: ({ @map, @entities }) ->
+            @camera = new Game.Camera
 
         update: ->
             for e in @entities
                 e.update()
+            @camera.target @entities[0]
             return

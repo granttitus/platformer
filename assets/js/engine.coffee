@@ -26,8 +26,8 @@ do (
 
         update: =>
             @game.update()
-            { map, entities } = @game
-            @render.update { map, entities }
+            { map, entities, camera } = @game
+            @render.update { map, entities, camera }
 
             kd.tick()
             requestAnimationFrame @update

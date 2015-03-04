@@ -5,16 +5,13 @@ http = require 'http'
 app = express()
 server = http.createServer app
 
-publicDir = __dirname + '/public'
-
 app.set 'views', __dirname + '/views'
 app.set 'view engine', 'jade'
 app.use assets()
-app.use express.static publicDir
+app.use express.static __dirname + '/public'
 
 app.get '/', (req, res) ->
-    url = "#{req.protocol}://#{req.get 'host'}"
-    res.render 'index', urlroot: url
+    res.render 'index'
 
 server.listen 5000
-console.log "Express server listening on port %d", server.address().port
+console.log "Express server listening on port #{server.address().port}"
