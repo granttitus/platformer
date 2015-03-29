@@ -1,6 +1,7 @@
 # TODO
 
 do (
+    Game = platform.module 'game'
     Render = platform.module 'render'
 ) ->
 
@@ -17,18 +18,22 @@ do (
             @context = @canvas.getContext '2d'
 
         update: ({ map, entities, camera }) ->
-            camera.bound WIDTH, HEIGHT
+            mapWidth = Game.Tile.SIZE * map.columns
+            mapHeight = Game.Tile.SIZE * map.rows
+            camera.bound mapWidth, mapHeight
+
             @context.fillStyle = CLEAR_COLOR
             @context.fillRect 0, 0, WIDTH, HEIGHT
 
             map.each (tile) =>
-                @context.fillStyle = @getTileColor tile.id
+                @context.fillStyle = getTileColor tile.id
                 {x, y} = camera.transform tile.x, tile.y
                 x = Math.ceil x
                 y = Math.ceil y
                 width = Math.ceil tile.width * camera.zoom
                 height = Math.ceil tile.height * camera.zoom
-                @context.fillRect x, y, width, height
+                if isOnScreen(x, y, width, height)
+                    @context.fillRect x, y, width, height
 
             for e in entities
                 @context.fillStyle = 'rgb(255, 255, 255)'
@@ -38,9 +43,15 @@ do (
                 @context.fillRect x, y, width, height
             return
 
-        getTileColor: (id) ->
+        getTileColor = (id) ->
             empty = 'rgba(0, 200, 250, 1)'
             switch id
                 when 0 then empty
                 when 1 then 'rgba(50, 50, 50, 1)'
                 when 2 then empty
+
+        isOnScreen = (x, y, width, height) ->
+            x + width >= 0 and
+            x - width <= WIDTH and
+            y + height >= 0 and
+            y - height <= HEIGHT

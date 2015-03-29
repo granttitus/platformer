@@ -8,20 +8,15 @@ do (
         defaults: {}
 
         configure: (config, options={}) ->
-            Util.defaults options,
-                silent: false
-                applyDefaults: false
             if options.applyDefaults
                 Util.defaults config, @defaults
             for key, value of config
                 continue if @[key] is value
                 @[key] = value
-                @trigger "change:#{key}"
             return
 
         @mixin: (obj) ->
-            properties = ['configure', 'defaults']
-            for index, property of properties
+            for property in ['configure', 'defaults']
                 if typeof obj is 'function'
                     obj::[property] = Mixin.Configurable::[property]
                 else

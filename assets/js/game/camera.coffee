@@ -9,9 +9,8 @@ do (
         constructor: ->
             @x = 0
             @y = 0
-            @width = 540
-            @height = 415
-            # TODO remove (dev use)
+            @width = 540 / 1.2
+            @height = 415 / 1.2
             window.addEventListener 'keydown', @handleKeyDown
 
         bound: (width, height) ->
