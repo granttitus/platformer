@@ -9,6 +9,10 @@ do (
         0: Tile.Empty
         1: Tile.Wall
         3: Tile.Exit
+        4: Tile.Boost
+        5: Tile.Boost
+        6: Tile.Boost
+        7: Tile.Boost
 
     class Game.Map
 
