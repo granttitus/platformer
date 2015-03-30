@@ -10,17 +10,19 @@ do (
 
         Event.mixin @::
 
+        key: 'human'
+
         defaults: Util.extend {}, @::defaults,
             width: 7
             height: 10
             jumpPower: 9
 
         initialize: ->
-            @bindKey ['UP', 'W'], @jump.bind @
+            @bindKey ['UP', 'W'], => @jump()
             @bindKey ['DOWN', 'S'], => @moveSouth @acceleration
             @bindKey ['RIGHT', 'D'], => @moveEast @acceleration
             @bindKey ['LEFT', 'A'], => @moveWest @acceleration
-            @bindKey ['SPACE'], => @interacting = true
+            @bindKey ['SPACE'], => @act()
             return
 
         update: ->
@@ -32,6 +34,17 @@ do (
         interact: (tile) ->
             if @interacting and tile.key is 'exit'
                 @trigger 'action:exit'
+            if @interacting and tile.key is 'chest'
+                setTimeout =>
+                    @item = tile.getItem()
+                    @item.bind 'remove', => @item = null
+                , 200
+            return
+
+        act: ->
+            @interacting = true
+            if @item?
+                @item.use @
             return
 
         jump: ->

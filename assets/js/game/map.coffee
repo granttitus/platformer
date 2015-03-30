@@ -13,6 +13,7 @@ do (
         5: Tile.Boost
         6: Tile.Boost
         7: Tile.Boost
+        8: Tile.Chest
 
     class Game.Map
 
