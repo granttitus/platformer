@@ -1,6 +1,6 @@
 #= require namespace
 #= require_tree vendor
-#= require util/index
+#= require_tree util
 #= require ./mixin
 #= require_tree .
 

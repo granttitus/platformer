@@ -7,11 +7,8 @@ do (
 
         defaults: {}
 
-        configure: (config, options={}) ->
-            if options.applyDefaults
-                Util.defaults config, @defaults
-            for key, value of config
-                continue if @[key] is value
+        configure: (config) ->
+            for own key, value of config
                 @[key] = value
             return
 
@@ -23,4 +20,34 @@ do (
                     obj[property] = Mixin.Configurable::[property]
             return
 
-    Mixin.Event = MicroEvent
+    class Mixin.Event
+
+        bind: (event, fn) ->
+            @_events ?= {}
+            @_events[event] ?= []
+            @_events[event].push fn
+            return
+
+        unbind: (event, fn) ->
+            @_events ?= {}
+            if event?
+                index = @_events[event].indexOf fn
+                @_events[event].splice index, 1
+            else
+                @_events = {}
+            return
+
+        trigger: (event, args...) ->
+            @_events ?= {}
+            return unless @_events[event]
+            for e in @_events[event]
+                e.apply this, args
+            return
+
+        @mixin: (obj) ->
+            for property in ['bind', 'unbind', 'trigger']
+                if typeof obj is 'function'
+                    obj::[property] = Mixin.Event::[property]
+                else
+                    obj[property] = Mixin.Event::[property]
+            return

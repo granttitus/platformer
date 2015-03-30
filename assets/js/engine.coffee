@@ -33,11 +33,15 @@ do (
             requestAnimationFrame @update
 
         handleWin: =>
-            @game.unbind 'win', @handleWin
-            @game.unbind 'loss', @handleLoss
-            @load @level + 1
+            setTimeout =>
+                @game.unbind 'win', @handleWin
+                @game.unbind 'lose', @handleLoss
+                @load @level + 1
+            , 0
 
         handleLoss: =>
-            @game.unbind 'win', @handleWin
-            @game.unbind 'loss', @handleLoss
-            @load @level
+            setTimeout =>
+                @game.unbind 'win', @handleWin
+                @game.unbind 'lose', @handleLoss
+                @load @level
+            , 0

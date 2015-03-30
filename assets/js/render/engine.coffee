@@ -49,6 +49,7 @@ do (
                 when 0 then empty
                 when 1 then 'rgba(50, 50, 50, 1)'
                 when 2 then empty
+                when 3 then 'rgba(147, 112, 219, 1)'
 
         isOnScreen = (x, y, width, height) ->
             x + width >= 0 and

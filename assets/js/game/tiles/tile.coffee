@@ -1,25 +1,23 @@
 do (
     Game = platform.module 'game'
+    Tile = platform.module 'game.tile'
+    {Configurable, Event} = platform.module 'mixin'
 ) ->
 
     SIZE = 25
-    WALKABLE_TILES =
-        0: true
-        2: true
 
     class Game.Tile
+
+        Event.mixin @::
+        Configurable.mixin @::
 
         @SIZE: SIZE
 
         defaults:
             width: SIZE
             height: SIZE
-            velocity: { x: 0, y: 0 }
 
         constructor: (x, y, @id) ->
-            @[key] = value for own key, value of @defaults
+            @configure @defaults
             @x = x * SIZE
             @y = y * SIZE
-
-        isWalkable: ->
-            WALKABLE_TILES[@id]?

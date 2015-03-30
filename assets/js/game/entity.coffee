@@ -5,6 +5,7 @@ do (
 ) ->
 
     class Game.Entity
+
         Event.mixin @::
         Configurable.mixin @::
 
@@ -19,7 +20,7 @@ do (
 
         constructor: ->
             @velocity = {x: 0, y: 0}
-            @configure {}, applyDefaults: true
+            @configure @defaults
             @initialize? arguments...
 
         update: ->
