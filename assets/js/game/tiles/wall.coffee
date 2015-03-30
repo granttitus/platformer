@@ -5,5 +5,7 @@ do (
 
     class Tile.Wall extends Game.Tile
 
+        key: 'wall'
+
         isWalkable: ->
             false

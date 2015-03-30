@@ -4,11 +4,14 @@ do (
 ) ->
 
     class Game.Engine
+
         Event.mixin @::
 
         initialize: ({ @map, @entities }) ->
             @camera = new Game.Camera
-            @map.bind 'collide:exit', @handleExit
+            for e in @entities
+                e.bind 'action:exit', @handleExit
+            return
 
         update: ->
             @map.update @entities
@@ -18,5 +21,4 @@ do (
             return
 
         handleExit: =>
-            @map.unbindEvents()
             @trigger 'win'

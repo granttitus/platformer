@@ -5,5 +5,7 @@ do (
 
     class Tile.Empty extends Game.Tile
 
+        key: 'empty'
+
         isWalkable: ->
             true

@@ -1,12 +1,11 @@
 do (
     Game = platform.module 'game'
     MapUtil = platform.module 'util.map'
-    {Event, Configurable} = platform.module 'mixin'
+    {Configurable} = platform.module 'mixin'
 ) ->
 
     class Game.Entity
 
-        Event.mixin @::
         Configurable.mixin @::
 
         key: 'entity'

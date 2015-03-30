@@ -3,9 +3,12 @@ do (
     Util = platform.module 'util'
     MapUtil = platform.module 'util.map'
     Keyboard = platform.module 'keyboard'
+    {Event} = platform.module 'mixin'
 ) ->
 
     class Game.Human extends Game.Entity
+
+        Event.mixin @::
 
         defaults: Util.extend {}, @::defaults,
             width: 7
@@ -17,11 +20,18 @@ do (
             @bindKey ['DOWN', 'S'], => @moveSouth @acceleration
             @bindKey ['RIGHT', 'D'], => @moveEast @acceleration
             @bindKey ['LEFT', 'A'], => @moveWest @acceleration
+            @bindKey ['SPACE'], => @interacting = true
             return
 
         update: ->
+            @interacting = false
             super
             @canJump or= @onGround()
+            return
+
+        interact: (tile) ->
+            if @interacting and tile.key is 'exit'
+                @trigger 'action:exit'
             return
 
         jump: ->

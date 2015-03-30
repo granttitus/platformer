@@ -5,10 +5,12 @@ do (
 
     class Tile.Exit extends Game.Tile
 
+        key: 'exit'
+
         update: (entities) ->
             for entity in entities
-                if @collides entity
-                    @trigger 'collide:exit'
+                if @collides(entity)
+                    entity.interact @
             return
 
         isWalkable: ->

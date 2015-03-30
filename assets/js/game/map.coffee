@@ -26,8 +26,6 @@ do (
 
         createTile: (x, y, id) ->
             tile = new TILES[id] x, y, id
-            # TODO better propagation
-            tile.bind 'collide:exit', => @trigger 'collide:exit'
             @tiles[y * @columns + x] = tile
             return
 
@@ -42,10 +40,4 @@ do (
         each: (fn) ->
             for tile in @tiles
                 fn tile
-            return
-
-        unbindEvents: ->
-            @unbind()
-            for tile in @tiles
-                tile.unbind()
             return
