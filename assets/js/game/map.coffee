@@ -35,6 +35,8 @@ do (
             return
 
         update: (entities) ->
+            for e in entities
+                e.velocity.y += 0.5
             for tile in @tiles when tile.update?
                 tile.update entities
             return

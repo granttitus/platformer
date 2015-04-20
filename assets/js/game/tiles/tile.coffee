@@ -1,14 +1,13 @@
 do (
     Game = platform.module 'game'
     Tile = platform.module 'game.tile'
-    {Configurable, Event} = platform.module 'mixin'
+    {Configurable} = platform.module 'mixin'
 ) ->
 
     SIZE = 25
 
     class Game.Tile
 
-        Event.mixin @::
         Configurable.mixin @::
 
         @SIZE: SIZE

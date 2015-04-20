@@ -7,18 +7,22 @@ do (
 
         Event.mixin @::
 
-        initialize: ({ @map, @entities }) ->
+        load: (id) ->
             @camera = new Game.Camera
-            for e in @entities
-                e.bind 'action:exit', @handleExit
+            @level = @getLevel id
+            @level.initialize @camera
+            @level.bind 'action:exit', @handleExit
             return
 
         update: ->
-            @map.update @entities
-            for e in @entities
-                e.update()
-            @camera.target @entities[0]
+            @level.update()
             return
 
         handleExit: =>
+            @level.unbind()
             @trigger 'win'
+            return
+
+        getLevel: (id) ->
+            id = 1
+            new Game['Level' + id]()

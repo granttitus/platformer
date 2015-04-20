@@ -34,17 +34,10 @@ do (
         interact: (tile) ->
             if @interacting and tile.key is 'exit'
                 @trigger 'action:exit'
-            if @interacting and tile.key is 'chest'
-                setTimeout =>
-                    @item = tile.getItem()
-                    @item.bind 'remove', => @item = null
-                , 200
             return
 
         act: ->
             @interacting = true
-            if @item?
-                @item.use @
             return
 
         jump: ->

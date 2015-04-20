@@ -2,44 +2,49 @@ do (
     Engine = platform.module 'engine'
     Render = platform.module 'render'
     Game = platform.module 'game'
-    MapUtil = platform.module 'util.map'
 ) ->
 
     class Engine.Main
 
         constructor: ->
             @render = new Render.Engine()
+            @game = new Game.Engine()
 
         load: (n) ->
-            data = Game.getLevel n
-            entities = MapUtil.extractEntities data
-            map = new Game.Map data
-            e.map = map for e in entities
-            @game = new Game.Engine()
+            @game.load n
             @game.bind 'win', @handleWin
             @game.bind 'lose', @handleLoss
-            @game.initialize { map, entities }
+            return
 
-        # TODO stop
         start: ->
-            @update()
+            unless @running
+                @running = true
+                @update()
+            return
+
+        stop: ->
+            @running = false
+            return
 
         update: =>
+            return unless @running
             @game.update()
-            { map, entities, camera } = @game
+            # TODO
+            { map, entities, camera } = @game.level
             @render.update { map, entities, camera }
 
             kd.tick()
             requestAnimationFrame @update
+            return
 
         handleWin: =>
-            @game.unbind()
             setTimeout =>
-                @load @level + 1
+                @game.load @level + 1
             , 0
+            return
 
         handleLoss: =>
-            @game.unbind()
             setTimeout =>
-                @load @level
+                @game.load @level
             , 0
+            return
