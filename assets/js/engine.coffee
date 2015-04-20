@@ -10,8 +10,8 @@ do (
             @render = new Render.Engine()
             @game = new Game.Engine()
 
-        load: (n) ->
-            @game.load n
+        load: (@level) ->
+            @game.load @level
             @game.bind 'win', @handleWin
             @game.bind 'lose', @handleLoss
             return
@@ -39,7 +39,8 @@ do (
 
         handleWin: =>
             setTimeout =>
-                @game.load @level + 1
+                @level += 1
+                @game.load @level
             , 0
             return
 

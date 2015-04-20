@@ -24,5 +24,4 @@ do (
             return
 
         getLevel: (id) ->
-            id = 1
             new Game['Level' + id]()

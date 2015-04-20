@@ -22,9 +22,6 @@ do (
             @initialize? arguments...
 
         update: ->
-            @velocity.x *= .8
-            @velocity.y *= .9
-
             if @velocity.x < 0.1 and @velocity.x > -0.1
                 @velocity.x = 0
 

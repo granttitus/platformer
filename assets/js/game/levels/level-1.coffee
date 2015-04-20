@@ -42,6 +42,9 @@ do (
         update: ->
             @map.update @entities
             for e in @entities
+                e.velocity.x *= 0.8
+                e.velocity.y *= 0.9
+                e.velocity.y += 0.5
                 e.update()
             @camera.target @entities[0]
             return

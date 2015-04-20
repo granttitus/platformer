@@ -19,6 +19,10 @@ do (
                         entity = new Game.Human()
                         entity.x = Game.Tile.SIZE * j + 10
                         entity.y = Game.Tile.SIZE * i + 10
+                    if cell is 8
+                        entity = new Game.TopDownHuman()
+                        entity.x = Game.Tile.SIZE * j + 10
+                        entity.y = Game.Tile.SIZE * i + 10
                     if entity?
                         level[i][j] = 0
                         entities.push entity
