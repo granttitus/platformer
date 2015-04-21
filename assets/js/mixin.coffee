@@ -44,8 +44,13 @@ do (
                 e.apply this, args
             return
 
+        propagate: (obj, event) ->
+            obj.bind event, =>
+                @trigger event, arguments...
+            return
+
         @mixin: (obj) ->
-            for property in ['bind', 'unbind', 'trigger']
+            for property in ['bind', 'unbind', 'trigger', 'propagate']
                 if typeof obj is 'function'
                     obj::[property] = Mixin.Event::[property]
                 else

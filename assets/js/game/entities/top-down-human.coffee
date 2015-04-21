@@ -6,7 +6,7 @@ do (
     {Event} = platform.module 'mixin'
 ) ->
 
-    class Game.Human extends Game.Entity
+    class Game.TopDownHuman extends Game.Entity
 
         Event.mixin @::
 
@@ -15,10 +15,9 @@ do (
         defaults: Util.extend {}, @::defaults,
             width: 7
             height: 10
-            jumpPower: 9
 
         initialize: ->
-            @bindKey ['UP', 'W'], => @jump()
+            @bindKey ['UP', 'W'], => @moveNorth @acceleration
             @bindKey ['DOWN', 'S'], => @moveSouth @acceleration
             @bindKey ['RIGHT', 'D'], => @moveEast @acceleration
             @bindKey ['LEFT', 'A'], => @moveWest @acceleration
@@ -28,29 +27,15 @@ do (
         update: ->
             @interacting = false
             super
-            @canJump or= @onGround()
             return
 
         interact: (tile) ->
             if @interacting and tile.key is 'exit'
                 @trigger 'action:exit'
-            if @interacting and tile.key is 'chest'
-                setTimeout =>
-                    @item = tile.getItem()
-                    @item.bind 'remove', => @item = null
-                , 200
             return
 
         act: ->
             @interacting = true
-            if @item?
-                @item.use @
-            return
-
-        jump: ->
-            return unless @canJump
-            @canJump = false
-            @moveNorth @jumpPower
             return
 
         onGround: ->

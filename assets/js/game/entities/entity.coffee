@@ -13,7 +13,6 @@ do (
         defaults:
             width: 26
             height: 26
-            gravity: 0.5
             acceleration: 0.4
             maxVelocity: 10
 
@@ -23,10 +22,6 @@ do (
             @initialize? arguments...
 
         update: ->
-            @velocity.x *= .8
-            @velocity.y *= .9
-            @velocity.y += @gravity
-
             if @velocity.x < 0.1 and @velocity.x > -0.1
                 @velocity.x = 0
 

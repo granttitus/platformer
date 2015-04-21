@@ -5,6 +5,7 @@ do (
     {Event} = platform.module 'mixin'
 ) ->
 
+    # TODO
     TILES =
         0: Tile.Empty
         1: Tile.Wall
@@ -13,7 +14,6 @@ do (
         5: Tile.Boost
         6: Tile.Boost
         7: Tile.Boost
-        8: Tile.Chest
 
     class Game.Map
 
