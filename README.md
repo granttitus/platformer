@@ -3,7 +3,7 @@
 
 ## Dev
 ```
-git clone https://github.com/stronglink/Platformer.git platformer
+git clone https://github.com/stronglink/platformer.git
 cd platformer
 npm install
 npm start
